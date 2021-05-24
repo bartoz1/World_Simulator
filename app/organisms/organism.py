@@ -29,9 +29,9 @@ class Organism(ABC):
     # def get_image(self):
     #     pass
 
-    @property
-    def image(self):
-        return self._image
+    # @property
+    # def image(self):
+    #     return self._image
 
     def will_survive_attack(self, other_organism: 'Organism') -> bool:
         """ Compares given organism to self (strength and age) and decides if it will survive the attack"""

@@ -1,6 +1,7 @@
 import pygame, sys
 from app.world import World
 from app.utilities import Options, OrganismType, Position
+from pathlib import Path
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 900, 500
 MAIN_MENU_TEXT_POS = 50
@@ -12,12 +13,12 @@ class Engine:
         self._world = None
         pygame.init()
         self._window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self._background = pygame.image.load(Path(__file__).parents[0].joinpath("assets").joinpath("backzyl.bmp"))
 
     # Main menu - new game, load game, options, exit
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
-        self.background = pygame.image.load("backzyl.bmp")
-        self._window.blit(self.background, (0, 0))
+        self._window.blit(self._background, (0, 0))
         pygame.display.update()
         selected = 0
         while True:
@@ -34,12 +35,11 @@ class Engine:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN:
                         if selected < len(MAIN_MENU_OPTIONS)-1:
-                            selected+=1
+                            selected += 1
                     if event.key == pygame.K_UP:
-                        if selected >0:
-                            selected-=1
+                        if selected > 0:
+                            selected -= 1
                     if event.key == pygame.K_RETURN:
-                        print(f'wybrano: {selected}')
                         return Options(selected)
 
     def start_new_game(self):
@@ -90,12 +90,11 @@ class Engine:
     # fills screen with solid color
     def __clear_screen(self):
         self._window.fill((0, 0, 0))
-        self.background = pygame.image.load("backzyl.bmp")
+        self.background = pygame.image.load("assets/backzyl.bmp")
         self._window.blit(self.background, (0,0))
 
     def __draw_rect(self, x, y):
         pygame.draw.rect(self._window, (200, 00, 0), pygame.Rect(x, y, 30, 30))
-        #TODO drawing different photos for different organisms
 
     def __draw_image(self, image, x, y):
         self._window.blit(image, (x, y))

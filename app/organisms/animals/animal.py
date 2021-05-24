@@ -3,9 +3,12 @@ from ..organism import Organism
 from ...utilities import OrganismType, Directions, FieldState
 from random import randint
 import copy
+from pathlib import Path
 
-class Animal(Organism, ABC):
+
+class Animal(Organism):
     REPROD_AGE = 4  # age that allows animals to reproduce
+    ASSETS_PATH = Path(__file__).parents[2].joinpath("assets")
 
     def __init__(self, world, pos_x, pos_y, initiative: int, strength: int, name: str, organism_type: OrganismType):
         super().__init__(world, pos_x, pos_y, initiative, strength, name, organism_type)

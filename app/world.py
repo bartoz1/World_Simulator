@@ -2,6 +2,8 @@ from app.utilities import Position, FieldState, OrganismType
 import bisect
 from random import randint
 from app.organisms.animals.wolf import Wolf
+from app.organisms.animals.sheep import Sheep
+from app.organisms.animals.animal import Animal
 #from organisms.organism import Organism
 from pprint import pprint
 
@@ -68,6 +70,8 @@ class World:
         new_organism = None
         if organism_type == OrganismType.WOLF:
             new_organism = Wolf(self, position.x, position.y)
+        elif organism_type == OrganismType.SHEEP:
+            new_organism = Sheep(self, position.x, position.y)
 
         self._born_organism_list.append(new_organism)
         self.world_map[position.y][position.x] = new_organism
@@ -98,4 +102,8 @@ class World:
 
     def generate_organisms(self):
         self.add_organism(OrganismType.WOLF, Position(4, 2))
+        self.add_organism(OrganismType.SHEEP, Position(2, 2))
         self._update_organism_list()
+
+
+
