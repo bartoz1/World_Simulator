@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from ..utilities import OrganismType, Position, Directions, FieldState
+import copy
 
 class Organism(ABC):
 
@@ -42,7 +43,7 @@ class Organism(ABC):
     def get_next_available_position(self, organism: 'Organism', desired_dir: Directions):
         """ Checks every field surrounding current position and returns first available starting from desired_dir """
         for i in range(4):
-            tmp = organism.position
+            tmp = copy.deepcopy(organism.position)
             if desired_dir == Directions.LEFT:
                 tmp.x -= 1
             elif desired_dir == Directions.RIGHT:
@@ -55,7 +56,7 @@ class Organism(ABC):
             if organism._world.get_field_state(tmp) == FieldState.AVAILABLE:
                 return tmp
             desired_dir = desired_dir.next()
-        return organism._position
+        return copy.deepcopy(organism._position)
 
     # SETTERS AND GETTERS
     @property
