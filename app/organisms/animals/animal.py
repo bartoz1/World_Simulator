@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..organism import Organism
 from ...utilities import OrganismType, Directions, FieldState
 from random import randint
-
+import copy
 
 class Animal(Organism, ABC):
     REPROD_AGE = 4  # age that allows animals to reproduce
@@ -12,18 +12,23 @@ class Animal(Organism, ABC):
 
     def action(self):
         """ Moves the animal to random position """
+        print("Animal akcja!")
         move_dir = Directions(randint(0, 3))
         next_pos = self.get_next_position(move_dir)
-
+        print(f'przemieszczenie: {move_dir} - {next_pos}')
         if next_pos.state == FieldState.NOTAVAILABLE:                           # no available moves
+            print("miejsce NOTAVAILABLE")
             self._world.add_world_event(f'{self.name} nie moze sie poruszyc')
         elif next_pos.state == FieldState.OCCUPIED:                             # collision with other organism
+            print("miejsce OCCUPIED")
             other_organism = self._world.get_organism_by_pos(next_pos)
             other_organism.collision(self)
         elif next_pos.state == FieldState.AVAILABLE:                            # moves to available position
+            print("miejsce AVAILABLE")
             self._world.add_world_event(f'{self.name} moved to: ({next_pos.x}, {next_pos.y})')
             self._world.move_organism(self, next_pos)
         else:
+            print("miejsce ELSE")
             self._world.add_world_event(f'{self.name} pozostal na swojej pozycji')
 
     def collision(self, other_organism: Organism):
@@ -46,8 +51,9 @@ class Animal(Organism, ABC):
 
     def get_next_position(self, desired_dir: Directions):
         """ Checks every field surrounding current position and returns first not border starting from desired_dir """
+
         for i in range(4):
-            tmp = self._position
+            tmp = copy.deepcopy(self._position)
             if desired_dir == Directions.LEFT:
                 tmp.x -= 1
             elif desired_dir == Directions.RIGHT:
@@ -60,7 +66,7 @@ class Animal(Organism, ABC):
             if self._world.get_field_state(tmp) != FieldState.BORDER:
                 return tmp
             desired_dir = desired_dir.next()
-        return self._position
+        return copy.deepcopy(self._position)
 
     def _give_birth(self, parent2: Organism):
         self._world.add_world_event(f'maja potomstwo: {self.name} z {parent2.name}')

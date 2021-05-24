@@ -12,6 +12,6 @@ while opt != Options.EXIT:
     opt = engine.main_menu()
     if opt == Options.NEW_GAME:     # creating new world
         engine.start_new_game()
-        input("hh?")
+        engine.run_game_loop()
     if opt == Options.LOAD_GAME:    # loading game from file
         pass

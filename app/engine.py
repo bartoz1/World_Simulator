@@ -41,12 +41,29 @@ class Engine:
                     if event.key == pygame.K_RETURN:
                         print(f'wybrano: {selected}')
                         return Options(selected)
-    # creates new world with random organisms and draws it on the screen
+
     def start_new_game(self):
+        """ Creates new world with random organisms and draws it on the screen """
         self.__clear_screen()
         self.__generate_new_world()
-        self._world.add_organism(OrganismType.WOLF, Position(3,2))
+        self._world.generate_organisms()
+
         self.__draw_world()
+
+    def run_game_loop(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_DOWN:
+                        self._world.play_round()
+                        self.__clear_screen()
+                        self.__draw_world()
+                    if event.key == pygame.K_x:
+                        running = False
 
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
@@ -55,7 +72,7 @@ class Engine:
     def __draw_world(self):
         for ri, row in enumerate(self._world.world_map):
             for ti, tile in enumerate(row):
-                if tile != None:
+                if tile is not None:
                     self.__draw_image(tile.image, (ti+1)*35, (ri+1)*35)
                 else:
                     self.__draw_rect((ti+1)*35, (ri+1)*35)
