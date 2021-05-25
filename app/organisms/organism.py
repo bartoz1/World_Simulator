@@ -96,6 +96,10 @@ class Organism(ABC):
     def name(self):
         return self._name
 
+    @property
+    def org_type(self):
+        return self._type
+
     def increment_age(self):
         self._age += 1
 

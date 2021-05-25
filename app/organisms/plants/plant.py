@@ -1,12 +1,13 @@
 from abc import ABC
-
 from ..organism import Organism
 from app.utilities import OrganismType, Directions, FieldState
 from random import randint
+from pathlib import Path
 
 
 class Plant(Organism, ABC):
     PLANT_GROWTH = 13   # chance in percents to regrow
+    ASSETS_PATH = Path(__file__).parents[2].joinpath("assets")
 
     def __init__(self, world, pos_x, pos_y, initiative: int, strength: int, name: str, organism_type: OrganismType):
         super().__init__(world, pos_x, pos_y, initiative, strength, name, organism_type)

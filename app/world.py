@@ -6,6 +6,11 @@ from app.organisms.animals.sheep import Sheep
 from app.organisms.animals.fox import Fox
 from app.organisms.animals.antelope import Antelope
 from app.organisms.animals.turtle import Turtle
+from app.organisms.plants.grass import Grass
+from app.organisms.plants.dandelion import Dandelion
+from app.organisms.plants.wolfberries import WolfBerries
+from app.organisms.plants.guarana import Guarana
+from app.organisms.plants.hogweed import Hogweed
 from app.organisms.animals.animal import Animal
 #from organisms.organism import Organism
 from pprint import pprint
@@ -83,6 +88,16 @@ class World:
             new_organism = Antelope(self, position.x, position.y)
         elif organism_type == OrganismType.TURTLE:
             new_organism = Turtle(self, position.x, position.y)
+        elif organism_type == OrganismType.GRASS:
+            new_organism = Grass(self, position.x, position.y)
+        elif organism_type == OrganismType.DANDELION:
+            new_organism = Dandelion(self, position.x, position.y)
+        elif organism_type == OrganismType.WOLF_BERRIES:
+            new_organism = WolfBerries(self, position.x, position.y)
+        elif organism_type == OrganismType.GUARANA:
+            new_organism = Guarana(self, position.x, position.y)
+        elif organism_type == OrganismType.HOGWEED:
+            new_organism = Hogweed(self, position.x, position.y)
 
         self._born_organism_list.append(new_organism)
         self.world_map[position.y][position.x] = new_organism
@@ -117,6 +132,11 @@ class World:
         self.add_organism(OrganismType.FOX, Position(1, 1))
         self.add_organism(OrganismType.ANTELOPE, Position(4, 4))
         self.add_organism(OrganismType.TURTLE, Position(3, 4))
+        self.add_organism(OrganismType.GRASS, Position(0, 0))
+        self.add_organism(OrganismType.DANDELION, Position(4, 0))
+        self.add_organism(OrganismType.WOLF_BERRIES, Position(2, 5))
+        self.add_organism(OrganismType.GUARANA, Position(3, 5))
+        self.add_organism(OrganismType.HOGWEED, Position(0, 5))
         self._update_organism_list()
 
 
