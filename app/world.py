@@ -4,6 +4,8 @@ from random import randint
 from app.organisms.animals.wolf import Wolf
 from app.organisms.animals.sheep import Sheep
 from app.organisms.animals.fox import Fox
+from app.organisms.animals.antelope import Antelope
+from app.organisms.animals.turtle import Turtle
 from app.organisms.animals.animal import Animal
 #from organisms.organism import Organism
 from pprint import pprint
@@ -14,7 +16,7 @@ class World:
         self._world_height = m_height
         self._world_width = m_width
         self.world_map =[[None for j in range(m_width)] for i in range(m_height)]
-        self._world_events = set()
+        self._world_events = []
         self._organism_list = []
         self._born_organism_list = []
         self._round = 0;
@@ -30,7 +32,8 @@ class World:
         return position.state
 
     def add_world_event(self, event: str):
-        self._world_events.add(event)
+        # self._world_events.add(event)
+        self._world_events.append(event)
 
     def get_organism_by_pos(self, position: Position):
         return self.world_map[position.y][position.x]
@@ -40,17 +43,18 @@ class World:
         # pprint(self.world_map)
         #pprint(self._organism_list)
         for organism in self._organism_list:
-            organism.action()
+            if organism.is_alive:
+                organism.action()
         self._round += 1
         self._update_organism_list()
         print(str(self._world_events))
+        self._world_events = []
 
     def move_organism(self, organism, next_pos: Position):
         """ moves organism from current position on map to next_pos (making previous posision None on map)"""
         self._clear_position(organism.position)
         self.world_map[next_pos.y][next_pos.x] = organism
         organism.position = next_pos
-        pprint(self.world_map)
 
     def _clear_position(self, position: Position):
         self.world_map[position.y][position.x] = None
@@ -75,6 +79,10 @@ class World:
             new_organism = Sheep(self, position.x, position.y)
         elif organism_type == OrganismType.FOX:
             new_organism = Fox(self, position.x, position.y)
+        elif organism_type == OrganismType.ANTELOPE:
+            new_organism = Antelope(self, position.x, position.y)
+        elif organism_type == OrganismType.TURTLE:
+            new_organism = Turtle(self, position.x, position.y)
 
         self._born_organism_list.append(new_organism)
         self.world_map[position.y][position.x] = new_organism
@@ -107,6 +115,8 @@ class World:
         self.add_organism(OrganismType.WOLF, Position(4, 2))
         self.add_organism(OrganismType.SHEEP, Position(2, 2))
         self.add_organism(OrganismType.FOX, Position(1, 1))
+        self.add_organism(OrganismType.ANTELOPE, Position(4, 4))
+        self.add_organism(OrganismType.TURTLE, Position(3, 4))
         self._update_organism_list()
 
 

@@ -6,7 +6,7 @@ import copy
 from pathlib import Path
 
 
-class Animal(Organism):
+class Animal(Organism, ABC):
     REPROD_AGE = 4  # age that allows animals to reproduce
     ASSETS_PATH = Path(__file__).parents[2].joinpath("assets")
 

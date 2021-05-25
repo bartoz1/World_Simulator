@@ -22,17 +22,10 @@ class Organism(ABC):
     def collision(self, other_organism):
         pass
 
-    # @abstractmethod
-    # def draw(self):
-    #     pass
-
-    # @abstractmethod
-    # def get_image(self):
-    #     pass
-
-    # @property
-    # def image(self):
-    #     return self._image
+    @property
+    @abstractmethod
+    def image(self):
+        pass
 
     def will_survive_attack(self, other_organism: 'Organism') -> bool:
         """ Compares given organism to self (strength and age) and decides if it will survive the attack"""
