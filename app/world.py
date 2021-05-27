@@ -20,6 +20,8 @@ from pprint import pprint
 
 
 class World:
+    ORGANISMS_DENSITY = 0.1
+
     def __init__(self, m_width, m_height):
         self._world_height = m_height
         self._world_width = m_width
@@ -49,6 +51,7 @@ class World:
         print("runda!")
         for organism in self._organism_list:
             if organism.is_alive:
+                organism.age += 1
                 organism.action()
         self._round += 1
         self._update_organism_list()
@@ -129,18 +132,21 @@ class World:
         return Position(0, 0, FieldState.NOTAVAILABLE)
 
     def generate_organisms(self):
-        # self.add_organism(OrganismType.WOLF, Position(4, 2))
-        # self.add_organism(OrganismType.SHEEP, Position(2, 2))
-        # self.add_organism(OrganismType.FOX, Position(1, 1))
-        # self.add_organism(OrganismType.ANTELOPE, Position(4, 4))
-        # self.add_organism(OrganismType.TURTLE, Position(3, 4))
-        self.add_organism(OrganismType.GRASS, Position(0, 0))
-        self.add_organism(OrganismType.DANDELION, Position(4, 0))
-        # self.add_organism(OrganismType.WOLF_BERRIES, Position(2, 5))
-        # self.add_organism(OrganismType.GUARANA, Position(3, 5))
-        self.add_organism(OrganismType.HOGWEED, self.get_random_available_position())
-        self.add_organism(OrganismType.CYBER_SHEEP, self.get_random_available_position())
+        for org_type in OrganismType:
+            org_count = 2
+            org_count += randint(0, 1 + int((self._world_width * self._world_height) / 11 * World.ORGANISMS_DENSITY))
+            print((self._world_width * self._world_height) / 11 * World.ORGANISMS_DENSITY)
+            if org_type == OrganismType.HUMAN:
+                org_count = 0
+
+            for i in range(org_count):
+                position = self.get_random_available_position()
+                if position.state == FieldState.NOTAVAILABLE:
+                    break
+                self.add_organism(org_type, position)
+
         self._update_organism_list()
+
 
     def add_human(self):
         pos = self.get_random_available_position()

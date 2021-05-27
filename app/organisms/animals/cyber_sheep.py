@@ -19,51 +19,51 @@ class CyberSheep(Animal):
             super().action()
             return
 
-        min_len = self._count_distance(hogweed_list[0].position, self.position)
+        min_len = self._count_distance(self.position, hogweed_list[0].position)
         min_id = 0
         for i, hw in enumerate(hogweed_list):
             tmp_len = self._count_distance(self.position, hw.position)
+
             if tmp_len < min_len:
                 min_len = tmp_len
                 min_id = i
+        print(f'moja {self.position}: {hogweed_list[min_id].position}')
         next_pos = self._next_pos_by_destination(hogweed_list[min_id].position)
 
         if next_pos.state == FieldState.NOTAVAILABLE:                           # no available moves
-            print("miejsce NOTAVAILABLE")
             self._world.add_world_event(f'{self.name} nie moze sie poruszyc')
         elif next_pos.state == FieldState.OCCUPIED:                             # collision with other organism
-            print("miejsce OCCUPIED")
             other_organism = self._world.get_organism_by_pos(next_pos)
             other_organism.collision(self)
         elif next_pos.state == FieldState.AVAILABLE:                            # moves to available position
-            print("miejsce AVAILABLE")
             self._world.add_world_event(f'{self.name} moved to: ({next_pos.x}, {next_pos.y})')
             self._world.move_organism(self, next_pos)
         else:
-            print("miejsce ELSE")
             self._world.add_world_event(f'{self.name} pozostal na swojej pozycji')
 
     def _next_pos_by_destination(self, dest_pos: Position):
         if self.position.x == dest_pos:
             return dest_pos
         angle = self._angle(dest_pos, self.position)
-        if 45 >= angle >= 0 or 360 >= angle < 315:
-            next = Directions.RIGHT
+        print(f'angle: {angle}')
+        next_p = Directions.LEFT
+        if 45 >= angle >= 0 or 315 <= angle < 360:
+            next_p = Directions.RIGHT
         if 135 >= angle > 45:
-            next = Directions.BOTTOM    # intuicyjnie top ale ze wzgledu na mape bottom
+            next_p = Directions.BOTTOM    # intuicyjnie top ale ze wzgledu na mape bottom
         if 225 >= angle > 135:
-            next = Directions.LEFT
+            next_p = Directions.LEFT
         if 315 >= angle > 225:
-            next = Directions.TOP       # intuicyjnie bottom ale ze wzgledu na mape top
+            next_p = Directions.TOP       # intuicyjnie bottom ale ze wzgledu na mape top
 
         tmp = copy.deepcopy(self._position)
-        if next == Directions.LEFT:
+        if next_p == Directions.LEFT:
             tmp.x -= 1
-        elif next == Directions.RIGHT:
+        elif next_p == Directions.RIGHT:
             tmp.x += 1
-        elif next == Directions.TOP:
+        elif next_p == Directions.TOP:
             tmp.y -= 1
-        elif next == Directions.BOTTOM:
+        elif next_p == Directions.BOTTOM:
             tmp.y += 1
         if self._world.get_field_state(tmp) != FieldState.BORDER:
             return tmp
@@ -72,12 +72,11 @@ class CyberSheep(Animal):
 
     @staticmethod
     def _count_distance( pos1: Position, pos2: Position):
-        return math.sqrt(math.pow(pos2.x-pos1.x, 2) + math.pow(pos2.y-pos1.x, 2))
+        return math.sqrt(math.pow(pos2.x-pos1.x, 2) + math.pow(pos2.y-pos1.y, 2))
 
     @staticmethod
     def _angle(a, b):
         ang = math.degrees(math.atan2(a.y-b.y, a.x-b.x))
-        print(ang)
         return ang + 360 if ang < 0 else ang
 
     @property
