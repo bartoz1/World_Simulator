@@ -15,7 +15,7 @@ class Animal(Organism, ABC):
 
     def action(self):
         """ Moves the animal to random position """
-        print("Animal akcja!")
+        print(f'{self.name} ini: {self.initiative}')
         move_dir = Directions(randint(0, 3))
         next_pos = self.get_next_position(move_dir)
         print(f'przemieszczenie: {move_dir} - {next_pos}')
@@ -46,7 +46,6 @@ class Animal(Organism, ABC):
             tmp = self.position
             self._world.move_organism(other_organism, tmp)
             self._world.kill_organism(self)
-
 
     def get_next_position(self, desired_dir: Directions):
         """ Checks every field surrounding current position and returns first not border starting from desired_dir """

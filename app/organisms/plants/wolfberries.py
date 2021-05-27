@@ -5,7 +5,7 @@ import pygame
 
 class WolfBerries(Plant):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 0, 99, "wilczej jagody", OrganismType.WOLF_BERRIES)
+        super().__init__(world, pos_x, pos_y, 0, 99, "wilcze jagody", OrganismType.WOLF_BERRIES)
         image_path = Plant.ASSETS_PATH.joinpath("wolf_berries.png")
         self._image = pygame.image.load(image_path)
 

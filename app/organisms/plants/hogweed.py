@@ -54,5 +54,5 @@ class Hogweed(Plant):
                 organism = self._world.get_organism_by_pos(tmp)
                 org_type = organism.org_type
                 if org_type in Hogweed.ANIMALS_TO_KILL:
-                    self._world.add_world_event(f'{self.name} zabil sasiada {organism.name}')
+                    self._world.add_world_event(f'{self.name} zabil {organism.name}')
                     self._world.kill_organism(organism)

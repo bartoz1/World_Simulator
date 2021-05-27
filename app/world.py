@@ -13,6 +13,7 @@ from app.organisms.plants.dandelion import Dandelion
 from app.organisms.plants.wolfberries import WolfBerries
 from app.organisms.plants.guarana import Guarana
 from app.organisms.plants.hogweed import Hogweed
+import copy
 
 from app.organisms.animals.animal import Animal
 #from organisms.organism import Organism
@@ -29,7 +30,8 @@ class World:
         self._world_events = []
         self._organism_list = []
         self._born_organism_list = []
-        self._round = 0;
+        self._round = 0
+        self._notification = ""
 
     def get_field_state(self, position: Position):
         if position.y >= self._world_height or position.y < 0 or position.x < 0 or position.x >= self._world_width:
@@ -48,15 +50,14 @@ class World:
         return self.world_map[position.y][position.x]
 
     def play_round(self):
-        print("runda!")
+        self._world_events = []
         for organism in self._organism_list:
             if organism.is_alive:
                 organism.age += 1
                 organism.action()
         self._round += 1
         self._update_organism_list()
-        print(str(self._world_events))
-        self._world_events = []
+
 
     def move_organism(self, organism, next_pos: Position):
         """ moves organism from current position on map to next_pos (making previous posision None on map)"""
@@ -147,7 +148,6 @@ class World:
 
         self._update_organism_list()
 
-
     def add_human(self):
         pos = self.get_random_available_position()
         human = Human(self, pos.x, pos.y)
@@ -163,8 +163,27 @@ class World:
                 lista.append(org)
         return lista
 
-
     def add_special_notific(self, text: str):
-        # TODO dodanie specjalnego powiadomienia do listy i wyswietlenie go w specjalnej czesci ekranu
-        pass
+        self._notification = text
 
+    def save_to_file(self):
+        f = open("save.txt", "w")
+        for org in self._organism_list:
+            f.write(str(org))
+            f.write('\n')
+
+        f.close()
+
+    @property
+    def notification(self):
+        ret = copy.deepcopy(self._notification)
+        self._notification = ""
+        return ret
+
+    @property
+    def world_events(self):
+        return self._world_events
+
+    @world_events.setter
+    def world_events(self, new):
+        self._world_events = new

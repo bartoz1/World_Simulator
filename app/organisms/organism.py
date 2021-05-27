@@ -115,3 +115,6 @@ class Organism(ABC):
         if self.initiative == other.initiative:
             return self.age < other.age
         return self.initiative < other.initiative
+
+    def __str__(self):
+        return f'{self.org_type.value} {self.age} {self.initiative} {self.strength} {self.position.x} {self.position.y}'

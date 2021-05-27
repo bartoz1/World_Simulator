@@ -133,3 +133,8 @@ class Human(Animal):
     @cooldown.setter
     def cooldown(self, cool):
         self._cooldown = cool
+
+    def __str__(self):
+        ret = f'{self.org_type.value} {self.age} {self.initiative} {self.strength} {self.position.x} {self.position.y}' \
+               f'{int(self._special_skill_activated)} {self.cooldown} {self.remaining_ability_uses}'
+        return ret
