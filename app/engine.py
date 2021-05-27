@@ -1,6 +1,6 @@
 import pygame, sys
 from app.world import World
-from app.utilities import Options, OrganismType, Position
+from app.utilities import Options, OrganismType, Position, Directions
 from pathlib import Path
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 900, 500
@@ -47,6 +47,7 @@ class Engine:
         self.__clear_screen()
         self.__generate_new_world()
         self._world.generate_organisms()
+        self._human = self._world.add_human()
 
         self.__draw_world()
 
@@ -58,7 +59,7 @@ class Engine:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_DOWN:
+                    if self._set_human_next_move(event):
                         self._world.play_round()
                         self.__clear_screen()
                         self.__draw_world()
@@ -67,7 +68,7 @@ class Engine:
 
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
-        self._world = World(5, 6)
+        self._world = World(10, 10)
 
     def __draw_world(self):
         for ri, row in enumerate(self._world.world_map):
@@ -93,8 +94,26 @@ class Engine:
         self.background = pygame.image.load("assets/backzyl.bmp")
         self._window.blit(self.background, (0,0))
 
+    def _set_human_next_move(self, event):
+        if event.key == pygame.K_DOWN:
+            self._human.next_move_dir = Directions.BOTTOM
+            return True
+        elif event.key == pygame.K_LEFT:
+            self._human.next_move_dir = Directions.LEFT
+            return True
+        elif event.key == pygame.K_UP:
+            self._human.next_move_dir = Directions.TOP
+            return True
+        elif event.key == pygame.K_RIGHT:
+            self._human.next_move_dir = Directions.RIGHT
+            return True
+        if event.key == pygame.K_s:
+            self._human.activate_special_ability()
+        return False
+
+
     def __draw_rect(self, x, y):
-        pygame.draw.rect(self._window, (200, 00, 0), pygame.Rect(x, y, 30, 30))
+        pygame.draw.rect(self._window, (150, 150, 150), pygame.Rect(x, y, 30, 30))
 
     def __draw_image(self, image, x, y):
         self._window.blit(image, (x, y))

@@ -3,14 +3,17 @@ import bisect
 from random import randint
 from app.organisms.animals.wolf import Wolf
 from app.organisms.animals.sheep import Sheep
+from app.organisms.animals.cyber_sheep import CyberSheep
 from app.organisms.animals.fox import Fox
 from app.organisms.animals.antelope import Antelope
 from app.organisms.animals.turtle import Turtle
+from app.organisms.animals.human import Human
 from app.organisms.plants.grass import Grass
 from app.organisms.plants.dandelion import Dandelion
 from app.organisms.plants.wolfberries import WolfBerries
 from app.organisms.plants.guarana import Guarana
 from app.organisms.plants.hogweed import Hogweed
+
 from app.organisms.animals.animal import Animal
 #from organisms.organism import Organism
 from pprint import pprint
@@ -25,7 +28,6 @@ class World:
         self._organism_list = []
         self._born_organism_list = []
         self._round = 0;
-        print(self.world_map)
 
     def get_field_state(self, position: Position):
         if position.y >= self._world_height or position.y < 0 or position.x < 0 or position.x >= self._world_width:
@@ -45,8 +47,6 @@ class World:
 
     def play_round(self):
         print("runda!")
-        # pprint(self.world_map)
-        #pprint(self._organism_list)
         for organism in self._organism_list:
             if organism.is_alive:
                 organism.action()
@@ -82,6 +82,8 @@ class World:
             new_organism = Wolf(self, position.x, position.y)
         elif organism_type == OrganismType.SHEEP:
             new_organism = Sheep(self, position.x, position.y)
+        elif organism_type == OrganismType.CYBER_SHEEP:
+            new_organism = CyberSheep(self, position.x, position.y)
         elif organism_type == OrganismType.FOX:
             new_organism = Fox(self, position.x, position.y)
         elif organism_type == OrganismType.ANTELOPE:
@@ -118,26 +120,45 @@ class World:
 
     def get_random_available_position(self):
         """ gets available position from map - choosing randomly, tries 150 times"""
-        tmp:Position
+        tmp = Position(-1, -1)
         for i in range(150):
             tmp.x = randint(0, self._world_width-1)
-            tmp.y = randint(0, self._world_height)
+            tmp.y = randint(0, self._world_height-1)
             if self.get_field_state(tmp) == FieldState.AVAILABLE:
                 return tmp
         return Position(0, 0, FieldState.NOTAVAILABLE)
 
     def generate_organisms(self):
-        self.add_organism(OrganismType.WOLF, Position(4, 2))
-        self.add_organism(OrganismType.SHEEP, Position(2, 2))
-        self.add_organism(OrganismType.FOX, Position(1, 1))
-        self.add_organism(OrganismType.ANTELOPE, Position(4, 4))
-        self.add_organism(OrganismType.TURTLE, Position(3, 4))
+        # self.add_organism(OrganismType.WOLF, Position(4, 2))
+        # self.add_organism(OrganismType.SHEEP, Position(2, 2))
+        # self.add_organism(OrganismType.FOX, Position(1, 1))
+        # self.add_organism(OrganismType.ANTELOPE, Position(4, 4))
+        # self.add_organism(OrganismType.TURTLE, Position(3, 4))
         self.add_organism(OrganismType.GRASS, Position(0, 0))
         self.add_organism(OrganismType.DANDELION, Position(4, 0))
-        self.add_organism(OrganismType.WOLF_BERRIES, Position(2, 5))
-        self.add_organism(OrganismType.GUARANA, Position(3, 5))
-        self.add_organism(OrganismType.HOGWEED, Position(0, 5))
+        # self.add_organism(OrganismType.WOLF_BERRIES, Position(2, 5))
+        # self.add_organism(OrganismType.GUARANA, Position(3, 5))
+        self.add_organism(OrganismType.HOGWEED, self.get_random_available_position())
+        self.add_organism(OrganismType.CYBER_SHEEP, self.get_random_available_position())
         self._update_organism_list()
 
+    def add_human(self):
+        pos = self.get_random_available_position()
+        human = Human(self, pos.x, pos.y)
+        self.world_map[pos.y][pos.x] = human
+        self._born_organism_list.append(human)
+        self._update_organism_list()
+        return human
 
+    def get_hogweed(self):
+        lista = []
+        for org in self._organism_list:
+            if org.org_type == OrganismType.HOGWEED:
+                lista.append(org)
+        return lista
+
+
+    def add_special_notific(self, text: str):
+        # TODO dodanie specjalnego powiadomienia do listy i wyswietlenie go w specjalnej czesci ekranu
+        pass
 

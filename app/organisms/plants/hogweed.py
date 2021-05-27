@@ -19,8 +19,12 @@ class Hogweed(Plant):
         return self._image
 
     def collision(self, other_organism):
-        self._world.add_world_event(f'{other_organism.name} zjadl {self.name} i umarl')
-        self._world.kill_organism(other_organism)
+        if other_organism.org_type != OrganismType.CYBER_SHEEP:
+            self._world.add_world_event(f'{other_organism.name} zjadl {self.name} i umarl')
+            self._world.kill_organism(other_organism)
+        else:
+            tmp = self.position
+            self._world.move_organism(other_organism, tmp)
         self._world.kill_organism(self)
 
     def action(self):

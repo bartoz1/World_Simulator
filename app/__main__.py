@@ -1,4 +1,4 @@
-from app.engine import Engine
+from engine import Engine
 from app.utilities import Options
 from app.world import World
 
