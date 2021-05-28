@@ -2,12 +2,13 @@ import pygame, sys
 from app.world import World
 from app.utilities import Options, OrganismType, Position, Directions
 from pathlib import Path
-
+import os
 MAIN_MENU_TEXT_POS = 50
 MAIN_MENU_OPTIONS = ("Start game", "Load game", "Options", "Exit")
 
 
 class Engine:
+    OPTIONS_MENU = ("MAP WIDTH", "MAP HEIGHT", "SAVE")
     BOLD_FONT = Path(__file__).parents[0].joinpath("assets").joinpath("motion-control.bold.otf")
     INFO_FONT = Path(__file__).parents[0].joinpath("assets").joinpath("CONSOLA.TTF")
     NOTHING_IMAGE = pygame.image.load(Path(__file__).parents[0].joinpath("assets").joinpath("nothing.png"))
@@ -23,6 +24,8 @@ class Engine:
         pygame.init()
         self.screen_height = 500
         self.screen_width = 900
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (400, 100)
+        pygame.display.set_caption("Symulator swiata | Bartosz Zylwis 184477")
         self._window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self._background = pygame.image.load(Path(__file__).parents[0].joinpath("assets").joinpath("backzyl.bmp"))
         self._notification = ""
@@ -32,6 +35,7 @@ class Engine:
 
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
+        self.__clear_screen()
         self._window.blit(self._background, (0, 0))
         pygame.display.update()
         selected = 0
@@ -84,8 +88,9 @@ class Engine:
                     if event.key == pygame.K_x:             # go back to main menu
                         running = False
                         self.__clear_screen()
-                    if event.key == pygame.K_q:             # save world
+                    if event.key == pygame.K_e:             # save world
                         self._world.save_to_file()
+                        self._draw_save_button(0)
                     if event.key == pygame.K_PAGEDOWN:      # shift events list
                         self._info_shift -= 1
                         self._draw_world_event()
@@ -107,6 +112,7 @@ class Engine:
             self._draw_notification()
         self._draw_world_event()
         self.__draw_world()
+        self._draw_save_button()
         pygame.display.update()
 
     def __draw_world(self):
@@ -209,6 +215,26 @@ class Engine:
         text_rect.topleft = (self.screen_width-260, -3)
         self._window.blit(text_obj, text_rect)
 
+    def _draw_save_button(self, mode=1):
+        """ Draws a button for saving game """
+        if mode == 1:
+            text = "ZAPISZ STAN GRY [ E ]"
+            dx = 0
+        else:
+            text = "ZAPISANO"
+            dx = 60
+        font = pygame.font.Font(Engine.BOLD_FONT, Engine.NOTIFI_FONT_SIZE)
+        text_w, text_h = font.size("ZAPISZ STAN GRY [ E ]")
+        position = (self.screen_width - text_w - 305) / 2
+        text_obj = font.render(text, 0, Engine.NOTIFI_COLOR)
+        text_rect = text_obj.get_rect()
+        text_rect.topleft = (position +dx, self.screen_height - 35)
+
+        pygame.draw.rect(self._window, (48, 141, 70), pygame.Rect(
+            position - 10, self.screen_height - 40, text_w + 20, text_h + 25), 0, 9)
+        self._window.blit(text_obj, text_rect)
+        pygame.display.update()
+
     @staticmethod
     def split_text(text):
         tmp = text.split()
@@ -231,6 +257,7 @@ class Engine:
             if i == 0:
                 self._world = World(int(data[0]), int(data[1]))
                 self._world.round = int(data[2])
+                self._map_width, self._map_height = int(data[0]), int(data[1])
             else:
                 new_org = self._world.add_organism(OrganismType(int(data[0])), Position(int(data[1]), int(data[2])))
                 new_org.age = int(data[3])
@@ -243,5 +270,78 @@ class Engine:
                     self._human.remaining_ability_uses = int(data[8])
 
         self._world.update_organism_list()
-
         f.close()
+        self._resize_window_to_map_size()
+
+    def options_menu(self):
+        """ Draws options menu with options to change: map width, map height"""
+        self.__clear_screen()
+        self._window.blit(self._background, (0, 0))
+        pygame.display.update()
+        selected = 0
+        while True:
+            for i, opt in enumerate(Engine.OPTIONS_MENU):
+                if i == selected:
+                    self.__draw_text(opt, (200, 134, 100), 50, MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+                    if i==0:
+                        self._draw_value_for_change(self._map_width, 5, 30, (200, 134, 100), 400 + 50,
+                                                    MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+                    if i==1:
+                        self._draw_value_for_change(self._map_height, 5, 25, (200, 134, 100), 400 + 50,
+                                                    MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+                else:
+                    self.__draw_text(opt, (100, 134, 100), 50, MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+                    if i==0:
+                        self._draw_value_for_change(self._map_width, 5, 30, (100, 134, 100), 400 + 50,
+                                                    MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+                    if i==1:
+                        self._draw_value_for_change(self._map_height, 5, 25, (100, 134, 100), 400 + 50,
+                                                    MAIN_MENU_TEXT_POS * (i + 1) + 20 * i)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_DOWN:
+                        if selected < len(Engine.OPTIONS_MENU) - 1:
+                            selected += 1
+                    if event.key == pygame.K_UP:
+                        if selected > 0:
+                            selected -= 1
+                    if event.key == pygame.K_RIGHT:
+                        if selected == 0 and 5<=self._map_width<30:
+                            self._map_width += 1
+                        if selected == 1 and 5<=self._map_height<25:
+                            self._map_height += 1
+                    if event.key == pygame.K_LEFT:
+                        if selected == 0 and 5<self._map_width<=30:
+                            self._map_width -= 1
+                        if selected == 1 and 5<self._map_height<=25:
+                            self._map_height -= 1
+                    if event.key == pygame.K_RETURN and selected == 2:
+                        self._resize_window_to_map_size()
+                        return
+
+    def _resize_window_to_map_size(self):
+        if self._map_width <= 10:
+            self.screen_width = 900
+        else:
+            self.screen_width = self._map_width*35 + 400
+
+        if self._map_height <= 10:
+            self.screen_height = 500
+        else:
+            self.screen_height = self._map_height*35 + 105
+
+        self._window = pygame.display.set_mode((self.screen_width, self.screen_height))
+
+    def _draw_value_for_change(self, value, min_v, max_v, color, pos_x, pos_y):
+        pygame.draw.rect(self._window, (0, 0, 0), pygame.Rect(pos_x, pos_y, 150, 50))
+        if value == min_v:
+            text = "   "+str(value) + " >"
+        elif value == max_v:
+            text = "< " + str(value)
+        else:
+            text = "< " + str(value) + " >"
+        self.__draw_text(text, color, pos_x, pos_y)

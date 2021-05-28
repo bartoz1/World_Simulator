@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class Options(Enum):
     NEW_GAME = 0
     LOAD_GAME = 1
-    Options = 2
+    OPTIONS = 2
     EXIT = 3
 
 

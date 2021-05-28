@@ -16,3 +16,5 @@ while opt != Options.EXIT:
     if opt == Options.LOAD_GAME:    # loading game from file
         engine._load_from_file()
         engine.run_game_loop()
+    if opt == Options.OPTIONS:
+        engine.options_menu()
