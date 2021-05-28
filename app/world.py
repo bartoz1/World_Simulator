@@ -54,9 +54,10 @@ class World:
         for organism in self._organism_list:
             if organism.is_alive:
                 organism.age += 1
+                # print(f'{organism.name} str: {organism.strength}')
                 organism.action()
         self._round += 1
-        self._update_organism_list()
+        self.update_organism_list()
 
 
     def move_organism(self, organism, next_pos: Position):
@@ -92,6 +93,8 @@ class World:
             new_organism = Fox(self, position.x, position.y)
         elif organism_type == OrganismType.ANTELOPE:
             new_organism = Antelope(self, position.x, position.y)
+        elif organism_type == OrganismType.HUMAN:
+            new_organism = Human(self, position.x, position.y)
         elif organism_type == OrganismType.TURTLE:
             new_organism = Turtle(self, position.x, position.y)
         elif organism_type == OrganismType.GRASS:
@@ -108,7 +111,9 @@ class World:
         self._born_organism_list.append(new_organism)
         self.world_map[position.y][position.x] = new_organism
 
-    def _update_organism_list(self):
+        return new_organism
+
+    def update_organism_list(self):
         self._organism_list = [org for org in self._organism_list if org.is_alive]              # removes dead organisms
         self._born_organism_list = [org for org in self._born_organism_list if org.is_alive]    # removes dead organisms
         for org in self._born_organism_list:
@@ -136,7 +141,6 @@ class World:
         for org_type in OrganismType:
             org_count = 2
             org_count += randint(0, 1 + int((self._world_width * self._world_height) / 11 * World.ORGANISMS_DENSITY))
-            print((self._world_width * self._world_height) / 11 * World.ORGANISMS_DENSITY)
             if org_type == OrganismType.HUMAN:
                 org_count = 0
 
@@ -146,14 +150,14 @@ class World:
                     break
                 self.add_organism(org_type, position)
 
-        self._update_organism_list()
+        self.update_organism_list()
 
     def add_human(self):
         pos = self.get_random_available_position()
         human = Human(self, pos.x, pos.y)
         self.world_map[pos.y][pos.x] = human
         self._born_organism_list.append(human)
-        self._update_organism_list()
+        self.update_organism_list()
         return human
 
     def get_hogweed(self):
@@ -168,6 +172,7 @@ class World:
 
     def save_to_file(self):
         f = open("save.txt", "w")
+        f.write(f'{self._world_width} {self._world_height} {self._round}\n')
         for org in self._organism_list:
             f.write(str(org))
             f.write('\n')
@@ -187,3 +192,11 @@ class World:
     @world_events.setter
     def world_events(self, new):
         self._world_events = new
+
+    @property
+    def round(self):
+        return self._round
+
+    @round.setter
+    def round(self, new_round):
+        self._round = new_round

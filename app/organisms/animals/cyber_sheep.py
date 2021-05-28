@@ -6,7 +6,7 @@ import copy
 
 class CyberSheep(Animal):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 11, 4, "cyber owca", OrganismType.CYBER_SHEEP)
+        super().__init__(world, pos_x, pos_y, 4, 11, "cyber owca", OrganismType.CYBER_SHEEP)
         image_path = Animal.ASSETS_PATH.joinpath("cybersheep.png")
         self._image = pygame.image.load(image_path)
 
@@ -27,7 +27,6 @@ class CyberSheep(Animal):
             if tmp_len < min_len:
                 min_len = tmp_len
                 min_id = i
-        print(f'moja {self.position}: {hogweed_list[min_id].position}')
         next_pos = self._next_pos_by_destination(hogweed_list[min_id].position)
 
         if next_pos.state == FieldState.NOTAVAILABLE:                           # no available moves
@@ -45,7 +44,6 @@ class CyberSheep(Animal):
         if self.position.x == dest_pos:
             return dest_pos
         angle = self._angle(dest_pos, self.position)
-        print(f'angle: {angle}')
         next_p = Directions.LEFT
         if 45 >= angle >= 0 or 315 <= angle < 360:
             next_p = Directions.RIGHT

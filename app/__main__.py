@@ -1,4 +1,4 @@
-from engine import Engine
+from app.engine import Engine
 from app.utilities import Options
 from app.world import World
 
@@ -14,4 +14,5 @@ while opt != Options.EXIT:
         engine.start_new_game()
         engine.run_game_loop()
     if opt == Options.LOAD_GAME:    # loading game from file
-        pass
+        engine._load_from_file()
+        engine.run_game_loop()

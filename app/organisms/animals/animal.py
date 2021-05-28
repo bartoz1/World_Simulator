@@ -15,10 +15,8 @@ class Animal(Organism, ABC):
 
     def action(self):
         """ Moves the animal to random position """
-        print(f'{self.name} ini: {self.initiative}')
         move_dir = Directions(randint(0, 3))
         next_pos = self.get_next_position(move_dir)
-        print(f'przemieszczenie: {move_dir} - {next_pos}')
         if next_pos.state == FieldState.NOTAVAILABLE:                           # no available moves
             self._world.add_world_event(f'{self.name} nie moze sie poruszyc')
         elif next_pos.state == FieldState.OCCUPIED:                             # collision with other organism

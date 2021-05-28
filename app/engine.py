@@ -16,8 +16,6 @@ class Engine:
     INFO_COLOR = (255, 255, 255)
     EVENTS_BAR_COLOR = (48, 141, 70)
     EVENTS_BG_COLOR = (48, 41, 70)
-    # SCREEN_WIDTH, SCREEN_HEIGHT = 900, 500
-
 
     def __init__(self):
         self._human = None
@@ -31,7 +29,6 @@ class Engine:
         self._map_width = 10
         self._map_height = 10
         self._info_shift = 0
-
 
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
@@ -68,8 +65,9 @@ class Engine:
         self.__draw_world()
 
     def run_game_loop(self):
-        self._draw_world_event()
-        pygame.display.update()
+
+        self._update_screen()
+
         running = True
         while running:
             for event in pygame.event.get():
@@ -77,22 +75,22 @@ class Engine:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if self._set_human_next_move(event):
+                    if self._set_human_next_move(event):    # handle human events
                         self._info_shift = 0
                         self._world.play_round()
                         self._update_screen()
                     if event.key == pygame.K_s:
                         self._update_screen()
-                    if event.key == pygame.K_x:
+                    if event.key == pygame.K_x:             # go back to main menu
                         running = False
                         self.__clear_screen()
-                    if event.key == pygame.K_q:
+                    if event.key == pygame.K_q:             # save world
                         self._world.save_to_file()
-                    if event.key == pygame.K_PAGEDOWN:
+                    if event.key == pygame.K_PAGEDOWN:      # shift events list
                         self._info_shift -= 1
                         self._draw_world_event()
                         pygame.display.update()
-                    if event.key == pygame.K_PAGEUP:
+                    if event.key == pygame.K_PAGEUP:        # shift events list
                         self._info_shift += 1
                         self._draw_world_event()
                         pygame.display.update()
@@ -163,7 +161,7 @@ class Engine:
     def _draw_notification(self):
         font = pygame.font.Font(Engine.BOLD_FONT, Engine.NOTIFI_FONT_SIZE)
         text_w, text_h = font.size(self._notification)
-        position = (self.screen_width - text_w) / 2
+        position = (self.screen_width - text_w - 305) / 2
         text_obj = font.render(self._notification, 0, Engine.NOTIFI_COLOR)
         text_rect = text_obj.get_rect()
         text_rect.topleft = (position, 0)
@@ -179,7 +177,6 @@ class Engine:
             pos_x-15, 0, 350, self.screen_height), 0, 0)
         pos_y = 20
         events = self._world.world_events
-        print(len(events))
         self._draw_info_bar()
         if len(events) == 0:
             return
@@ -225,3 +222,26 @@ class Engine:
                 right.append(chunk)
         left.append('->')
         return ' '.join(left), ' '.join(right)
+
+    def _load_from_file(self):
+        f = open("save.txt", "r")
+
+        for i, line in enumerate(f):
+            data = line.strip().split()
+            if i == 0:
+                self._world = World(int(data[0]), int(data[1]))
+                self._world.round = int(data[2])
+            else:
+                new_org = self._world.add_organism(OrganismType(int(data[0])), Position(int(data[1]), int(data[2])))
+                new_org.age = int(data[3])
+                new_org.initiative = int(data[4])
+                new_org.strength = int(data[5])
+                if OrganismType(int(data[0])) == OrganismType.HUMAN:
+                    self._human = new_org
+                    self._human.special_skill_activated = bool(int(data[6]))
+                    self._human.cooldown = int(data[7])
+                    self._human.remaining_ability_uses = int(data[8])
+
+        self._world.update_organism_list()
+
+        f.close()

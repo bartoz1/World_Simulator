@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from ..utilities import OrganismType, Position, Directions, FieldState
 import copy
 
+
 class Organism(ABC):
 
     def __init__(self, world, pos_x, pos_y, initiative: int, strength: int, name: str, organism_type: OrganismType):
@@ -117,4 +118,4 @@ class Organism(ABC):
         return self.initiative < other.initiative
 
     def __str__(self):
-        return f'{self.org_type.value} {self.age} {self.initiative} {self.strength} {self.position.x} {self.position.y}'
+        return f'{self.org_type.value} {self.position.x} {self.position.y} {self.age} {self.initiative} {self.strength}'
