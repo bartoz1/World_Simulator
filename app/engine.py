@@ -102,6 +102,7 @@ class Engine:
                         pygame.display.update()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self._handle_mouse_click(event)
+                    self._update_screen()
 
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
@@ -358,33 +359,59 @@ class Engine:
 
     def _handle_mouse_click(self, event):
         pos = self._map_pos_from_mouse_pos(*event.pos)
-        # if pos.x == -1 or pos.y == -1:
-        #     return
-        self._draw_add_organism_menu(*event.pos)
-        input("asd")
-        self._world.add_organism(OrganismType.GUARANA, pos)
+        if pos.x == -1 or pos.y == -1:
+            return
+        x, y = event.pos
+        if y+280 > self.screen_height:  # shifting y when out of screen
+            y += self.screen_height - (y+280)
+        self._draw_add_organism_menu(x, y)
+        waiting = True
+        selected = -1
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    cx, cy = event.pos      # where users clicked
+                    if x < cx < x + 220 and y < cy < y + 280:   # click withing the menu
+                        if selected == (cy-50-y)//20+1:         # 2nd click on same organism
+                            waiting = False
+                            break
+                        self._draw_add_organism_menu(x, y, (cy-50-y)//20+1)
+                        selected = (cy-50-y)//20+1
+                    else:       # click outside the menu
+                        return
+        self._world.add_organism(OrganismType(selected), pos)
         self._world.update_organism_list()
 
-    def _draw_add_organism_menu(self, x, y):
+    def _draw_add_organism_menu(self, x, y, selected=-1):
         graphics = ["assets/wolf.png", "assets/sheep.png", "assets/fox.png", "assets/turtle.png", "assets/antelope.png", "assets/grass.png", "assets/dandelion.png", "assets/guarana.png", "assets/wolf_berries.png", "assets/hogweed.png", "assets/cybersheep.png"]
-        pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
-            x, y, 220, 280), 0, 15)
         pygame.draw.rect(self._window, Engine.EVENTS_BG_COLOR, pygame.Rect(
+            x, y, 220, 280), 0, 15)
+        pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
             x, y, 220, 40), 0, 15)
+        pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
+            x, y, 220, 280), 3, 15)
         font = pygame.font.Font(Engine.BOLD_FONT, 35)
         text_obj = font.render("DODAJ ORGANIZM", 0, Engine.INFO_COLOR)
         text_rect = text_obj.get_rect()
         text_rect.topleft = (x+10, y)
         self._window.blit(text_obj, text_rect)
         font = pygame.font.Font(Engine.INFO_FONT, 15)
+
         for i, organism in enumerate(OrganismType):     # listing all available organisms
             if organism != OrganismType.HUMAN:
-                text_obj = font.render(organism.name, 0, Engine.INFO_COLOR)
+                if selected == i:
+                    text_obj = font.render(organism.name, 0, Engine.EVENTS_BAR_COLOR)
+                else:
+                    text_obj = font.render(organism.name, 0, Engine.INFO_COLOR)
                 text_rect = text_obj.get_rect()
                 text_rect.topleft = (x+55, y+10+ (i + 1)*20)
 
                 graphic = pygame.transform.scale(pygame.image.load(graphics[i-1]), (20, 20))
                 self.__draw_image(graphic, x+30, y+5+ (i + 1)*20)
                 self._window.blit(text_obj, text_rect)
-
         pygame.display.update()
+
+

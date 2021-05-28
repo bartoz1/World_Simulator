@@ -83,6 +83,11 @@ class World:
     def add_organism(self, organism_type: OrganismType, position: Position):
         # TODO ify dla kazdego rodzaju zwierzecia
         new_organism = None
+
+        curr_org = self.get_organism_by_pos(position)
+        if curr_org is not None:
+            self.kill_organism(curr_org)
+
         if organism_type == OrganismType.WOLF:
             new_organism = Wolf(self, position.x, position.y)
         elif organism_type == OrganismType.SHEEP:
