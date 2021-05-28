@@ -99,7 +99,8 @@ class Engine:
                         self._info_shift += 1
                         self._draw_world_event()
                         pygame.display.update()
-
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self._handle_mouse_click(event)
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
         self._world = World(self._map_width, self._map_height)
@@ -345,3 +346,29 @@ class Engine:
         else:
             text = "< " + str(value) + " >"
         self.__draw_text(text, color, pos_x, pos_y)
+
+    def _map_pos_from_mouse_pos(self, m_x, m_y):
+        x = m_x // 35 - 1
+        y = m_y // 35 - 1
+        if x < 0 or y < 0 or x >= self._map_width or y >= self._map_height:
+            return Position(-1, -1)
+        return Position(x, y)
+
+    def _handle_mouse_click(self, event):
+        pos = self._map_pos_from_mouse_pos(*event.pos)
+        # if pos.x == -1 or pos.y == -1:
+        #     return
+        self._draw_add_organism_menu(*event.pos)
+        input("asd")
+        self._world.add_organism(OrganismType.GUARANA, pos)
+        self._world.update_organism_list()
+
+    def _draw_add_organism_menu(self, x, y):
+        pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
+            x, y, 220, 70), 0, 15)
+        font = pygame.font.Font(Engine.BOLD_FONT, 35)
+        text_obj = font.render("DODAJ ORGANIZM", 0, Engine.INFO_COLOR)
+        text_rect = text_obj.get_rect()
+        text_rect.topleft = (x+10, y)
+        self._window.blit(text_obj, text_rect)
+        pygame.display.update()
