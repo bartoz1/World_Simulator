@@ -101,8 +101,18 @@ class Engine:
                         self._draw_world_event()
                         pygame.display.update()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    self._scroll_info(event)
                     self._handle_mouse_click(event)
                     self._update_screen()
+
+    def _scroll_info(self, event):
+        cx, cy = event.pos  # interaction pos
+        if cx > self.screen_width - 320:
+            if event.button == 4:
+                self._info_shift += 1
+            if event.button == 5:
+                self._info_shift -= 1
+
 
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
