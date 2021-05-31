@@ -37,7 +37,7 @@ class Engine:
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, (self.screen_width - self._background.get_width(), self.screen_height - self._background.get_height()))
         pygame.display.update()
         selected = 0
         while True:
@@ -290,7 +290,7 @@ class Engine:
     def options_menu(self):
         """ Draws options menu with options to change: map width, map height"""
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, (self.screen_width - self._background.get_width(), self.screen_height - self._background.get_height()))
         pygame.display.update()
         selected = 0
         while True:
