@@ -59,7 +59,6 @@ class World:
         self._round += 1
         self.update_organism_list()
 
-
     def move_organism(self, organism, next_pos: Position):
         """ moves organism from current position on map to next_pos (making previous posision None on map)"""
         self._clear_position(organism.position)
