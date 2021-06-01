@@ -37,7 +37,7 @@ class Engine:
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, (self.screen_width-self._background.get_width(), self.screen_height-self._background.get_height()))
         pygame.display.update()
         selected = 0
         while True:
@@ -263,7 +263,7 @@ class Engine:
         left.append('->')
         return ' '.join(left), ' '.join(right)
 
-    def _load_from_file(self):
+    def load_from_file(self):
         f = open("save.txt", "r")
 
         for i, line in enumerate(f):
@@ -290,7 +290,7 @@ class Engine:
     def options_menu(self):
         """ Draws options menu with options to change: map width, map height"""
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, self._window.blit(self._background, (self.screen_width-self._background.get_width(), self.screen_height-self._background.get_height())))   # bottom right graphic
         pygame.display.update()
         selected = 0
         while True:
