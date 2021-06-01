@@ -4,7 +4,7 @@ from app.utilities import Options, OrganismType, Position, Directions
 from pathlib import Path
 import os
 MAIN_MENU_TEXT_POS = 50
-MAIN_MENU_OPTIONS = ("Start game", "Load game", "Options", "Exit")
+MAIN_MENU_OPTIONS = ("Start game", "Load game", "Options", "EXIT")
 
 
 class Engine:
