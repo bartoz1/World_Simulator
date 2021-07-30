@@ -26,7 +26,7 @@ class Engine:
         self.screen_height = 500
         self.screen_width = 900
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (400, 100)
-        pygame.display.set_caption("Symulator swiata | Bartosz Zylwis 184477")
+        pygame.display.set_caption("World Symulator | Bartosz Zylwis")
         self._window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self._background = pygame.image.load(Path(__file__).parents[0].joinpath("assets").joinpath("backzyl.bmp"))
         self._notification = ""
@@ -37,7 +37,8 @@ class Engine:
     def main_menu(self):
         """ Draws main menu with options: new game, load game, options, exit """
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, (self.screen_width - self._background.get_width(), self.screen_height-self._background.get_height()))
+
         pygame.display.update()
         selected = 0
         while True:
@@ -75,6 +76,10 @@ class Engine:
 
         running = True
         while running:
+            if not self._human.is_alive:
+                self._game_over_info();
+                running = False
+                self.__clear_screen()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -113,6 +118,16 @@ class Engine:
             if event.button == 5:
                 self._info_shift -= 1
 
+    def _game_over_info(self):
+        self._notification = 'Game Over, human died!'
+        self._draw_notification()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    return
 
     def __generate_new_world(self):
         #TODO wczytanie od uzytkownika wymiarow swiata
@@ -263,7 +278,7 @@ class Engine:
         left.append('->')
         return ' '.join(left), ' '.join(right)
 
-    def _load_from_file(self):
+    def load_from_file(self):
         f = open("save.txt", "r")
 
         for i, line in enumerate(f):
@@ -290,7 +305,7 @@ class Engine:
     def options_menu(self):
         """ Draws options menu with options to change: map width, map height"""
         self.__clear_screen()
-        self._window.blit(self._background, (0, 0))
+        self._window.blit(self._background, (self.screen_width - self._background.get_width(), self.screen_height-self._background.get_height()))
         pygame.display.update()
         selected = 0
         while True:
