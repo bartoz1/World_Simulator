@@ -12,6 +12,8 @@ setup(
    author='RushKappa',
    author_email='bartoszzylwis@gmail.com',
    install_requires=required,
+   package_data={'assets': ["*.png","*.ttf","*.otf","*.bmp"]},
+   include_package_data=True,
    packages=find_packages(),
    
 )
