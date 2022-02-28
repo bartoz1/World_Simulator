@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(
-   name='world_simpulator_bartoz1',
+   name='worldsimpulator',
    version='0.9',
    description='Simulator of the world in which there are plants and animals, including human with special ability.',
    author='RushKappa',
