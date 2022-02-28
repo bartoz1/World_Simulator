@@ -11,8 +11,6 @@ setup(
    description='Simulator of the world in which there are plants and animals, including human with special ability.',
    author='RushKappa',
    author_email='bartoszzylwis@gmail.com',
-   package_data={'worldsimulator/assets':['assets/*.png', '*.bmp', '*.ttf', 'assets/*.otf']},
-   include_package_data=True,
    install_requires=required,
    packages=find_packages(),
    
