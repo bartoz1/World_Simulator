@@ -434,7 +434,7 @@ class Engine:
                 text_rect = text_obj.get_rect()
                 text_rect.topleft = (x+55, y+10+ (i + 1)*20)
 
-                graphic = pygame.transform.scale(pygame.image.load("app\\"+graphics[i-1]), (20, 20))
+                graphic = pygame.transform.scale(pygame.image.load(os.path.dirname(os.path.realpath(__file__))+'\\'+graphics[i-1]), (20, 20))
                 self.__draw_image(graphic, x+30, y+5+ (i + 1)*20)
                 self._window.blit(text_obj, text_rect)
         pygame.display.update()
