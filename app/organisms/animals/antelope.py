@@ -7,7 +7,7 @@ from ..organism import Organism
 
 class Antelope(Animal):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 4, 4, "antylopa", OrganismType.ANTELOPE)
+        super().__init__(world, pos_x, pos_y, 4, 4, "antelope", OrganismType.ANTELOPE)
         image_path = Animal.ASSETS_PATH.joinpath("antelope.png")
         self._image = pygame.image.load(image_path)
 
@@ -46,7 +46,7 @@ class Antelope(Animal):
                 self._give_birth(other_organism)
             else:
                 self._world.add_world_event(
-                    f'rozmnazanie {self.name} z {other_organism.name} niemozliwe ze wzgledu na wiek')
+                    f'reproduction {self.name} with {other_organism.name} not possible (age)')
         else:
             if self._world.draw_truth(50):
                 next_pos = self.get_next_available_position(self, Directions.LEFT)
@@ -54,7 +54,7 @@ class Antelope(Animal):
                 if self._world.are_diferent_positions(self.position, next_pos):
                     """ animal finds an available field to escape so escapes """
                     self._world.add_world_event(
-                        f'{self.name} uciekla przed {other_organism.name}')
+                        f'{self.name} ran away from the {other_organism.name}')
                     tmp = copy.deepcopy(self._position)
                     self._world.move_organism(self, next_pos)
                     self._world.move_organism(other_organism, tmp)
@@ -62,12 +62,12 @@ class Antelope(Animal):
             if self.will_survive_attack(other_organism):
                 """ attacker dies trying to kill this organism """
                 self._world.add_world_event(
-                    f'{other_organism.name} zmarl wykonujac atak na {self.name} {self.position}')
+                    f'{other_organism.name} died attacking {self.name} {self.position}')
                 self._world.kill_organism(other_organism)
 
             else:
                 """ attacker kills prey - this object """
-                self._world.add_world_event(f'{other_organism.name} zabilo {self.name} {self.position}')
+                self._world.add_world_event(f'{other_organism.name} killed {self.name} {self.position}')
                 tmp = self.position
                 self._world.move_organism(other_organism, tmp)
                 self._world.kill_organism(self)

@@ -5,7 +5,7 @@ import pygame
 
 class Dandelion(Plant):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 0, 0, "mlecz", OrganismType.DANDELION)
+        super().__init__(world, pos_x, pos_y, 0, 0, "dandelion", OrganismType.DANDELION)
         image_path = Plant.ASSETS_PATH.joinpath("dandelion.png")
         self._image = pygame.image.load(image_path)
 

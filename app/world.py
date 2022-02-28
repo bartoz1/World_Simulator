@@ -80,7 +80,6 @@ class World:
         return True
 
     def add_organism(self, organism_type: OrganismType, position: Position):
-        # TODO ify dla kazdego rodzaju zwierzecia
         new_organism = None
 
         curr_org = self.get_organism_by_pos(position)

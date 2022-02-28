@@ -239,21 +239,21 @@ class Engine:
         pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
             self.screen_width-320, -20, 320, 70), 0, 15)
         font = pygame.font.Font(Engine.BOLD_FONT, 55)
-        text_obj = font.render("ZDARZENIA", 0, Engine.INFO_COLOR)
+        text_obj = font.render("EVENTS", 0, Engine.INFO_COLOR)
         text_rect = text_obj.get_rect()
-        text_rect.topleft = (self.screen_width-260, -3)
+        text_rect.topleft = (self.screen_width-230, -3)
         self._window.blit(text_obj, text_rect)
 
     def _draw_save_button(self, mode=1):
         """ Draws a button for saving game """
         if mode == 1:
-            text = "ZAPISZ STAN GRY [ E ]"
+            text = "SAVE THE GAME [ E ]"
             dx = 0
         else:
-            text = "ZAPISANO"
+            text = " SAVED"
             dx = 60
         font = pygame.font.Font(Engine.BOLD_FONT, Engine.NOTIFI_FONT_SIZE)
-        text_w, text_h = font.size("ZAPISZ STAN GRY [ E ]")
+        text_w, text_h = font.size("SAVE THE GAME [ E ]")
         position = (self.screen_width - text_w - 305) / 2
         text_obj = font.render(text, 0, Engine.NOTIFI_COLOR)
         text_rect = text_obj.get_rect()
@@ -413,13 +413,13 @@ class Engine:
     def _draw_add_organism_menu(self, x, y, selected=-1):
         graphics = ["assets/wolf.png", "assets/sheep.png", "assets/fox.png", "assets/turtle.png", "assets/antelope.png", "assets/grass.png", "assets/dandelion.png", "assets/guarana.png", "assets/wolf_berries.png", "assets/hogweed.png", "assets/cybersheep.png"]
         pygame.draw.rect(self._window, Engine.EVENTS_BG_COLOR, pygame.Rect(
-            x, y, 220, 280), 0, 15)
+            x, y, 200, 280), 0, 15)
         pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
-            x, y, 220, 40), 0, 15)
+            x, y, 200, 40), 0, 15)
         pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
-            x, y, 220, 280), 3, 15)
+            x, y, 200, 280), 3, 15)
         font = pygame.font.Font(Engine.BOLD_FONT, 35)
-        text_obj = font.render("ADD NEW ORGANISM", 0, Engine.INFO_COLOR)
+        text_obj = font.render("ADD ORGANISM", 0, Engine.INFO_COLOR)
         text_rect = text_obj.get_rect()
         text_rect.topleft = (x+10, y)
         self._window.blit(text_obj, text_rect)
@@ -434,7 +434,7 @@ class Engine:
                 text_rect = text_obj.get_rect()
                 text_rect.topleft = (x+55, y+10+ (i + 1)*20)
 
-                graphic = pygame.transform.scale(pygame.image.load(graphics[i-1]), (20, 20))
+                graphic = pygame.transform.scale(pygame.image.load("app\\"+graphics[i-1]), (20, 20))
                 self.__draw_image(graphic, x+30, y+5+ (i + 1)*20)
                 self._window.blit(text_obj, text_rect)
         pygame.display.update()

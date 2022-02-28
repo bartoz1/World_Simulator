@@ -7,7 +7,7 @@ from ..organism import Organism
 
 class Turtle(Animal):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 1, 2, "zolw", OrganismType.TURTLE)
+        super().__init__(world, pos_x, pos_y, 1, 2, "turtle", OrganismType.TURTLE)
         image_path = Animal.ASSETS_PATH.joinpath("turtle.png")
         self._image = pygame.image.load(image_path)
 
@@ -50,12 +50,12 @@ class Turtle(Animal):
                 self._give_birth(other_organism)
             else:
                 self._world.add_world_event(
-                    f'rozmnazanie {self.name} z {other_organism.name} niemozliwe ze wzgledu na wiek')
+                    f'reproduction {self.name} with {other_organism.name} not possible (age)')
         elif other_organism.strength < 5:
             self._world.add_world_event(
-                f'{self.name} odparl atak {other_organism.name} ')
+                f'{self.name} repelled {other_organism.name}\'s attack')
         else:
-            self._world.add_world_event(f'{other_organism.name} zabilo {self.name} {self.position}')
+            self._world.add_world_event(f'{other_organism.name} killed {self.name} {self.position}')
             tmp = self.position
             self._world.move_organism(other_organism, tmp)
             self._world.kill_organism(self)

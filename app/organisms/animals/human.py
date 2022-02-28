@@ -7,7 +7,7 @@ from random import randint
 
 class Human(Animal):
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 4, 5, "czlowiek", OrganismType.HUMAN)
+        super().__init__(world, pos_x, pos_y, 4, 5, "human", OrganismType.HUMAN)
         image_path = Animal.ASSETS_PATH.joinpath("human.png")
         self._image = pygame.image.load(image_path)
         self._next_move_dir = None
@@ -22,7 +22,7 @@ class Human(Animal):
 
         next_pos = self.get_next_position(self._next_move_dir)
         if next_pos.state == FieldState.NOTAVAILABLE:                           # no available moves
-            self._world.add_world_event(f'{self.name} nie moze sie poruszyc')
+            self._world.add_world_event(f'{self.name} cannot move')
         elif next_pos.state == FieldState.OCCUPIED:                             # collision with other organism
             other_organism = self._world.get_organism_by_pos(next_pos)
             other_organism.collision(self)
@@ -30,7 +30,7 @@ class Human(Animal):
             self._world.add_world_event(f'{self.name} moved to: ({next_pos.x}, {next_pos.y})')
             self._world.move_organism(self, next_pos)
         else:
-            self._world.add_world_event(f'{self.name} stoi')
+            self._world.add_world_event(f'{self.name} sleeps')
         self._next_move_dir = None
         self._update_uses_and_cooldown()
 
@@ -44,7 +44,7 @@ class Human(Animal):
         if self._special_skill_activated and self._remaining_ability_uses <= 2:
             if self._world.draw_truth(50):
                 move_len = 1
-                self._world.add_special_notific("specjalna umiejetnosc nie zadzialala")
+                self._world.add_special_notific("the special skill did not work")
 
         tmp = copy.deepcopy(self.position)
         if desired_dir == Directions.LEFT:
@@ -81,9 +81,9 @@ class Human(Animal):
 
     def activate_special_ability(self):
         if self._cooldown != 0:
-            self._world.add_special_notific(f'cooldown {self._cooldown} tur!')
+            self._world.add_special_notific(f'cooldown {self._cooldown} turns!')
         else:
-            self._world.add_special_notific('specjalna umiejetnosc aktywowana!')
+            self._world.add_special_notific('special skill activated!')
             self._cooldown = 10
             self._special_skill_activated = True
             self._remaining_ability_uses = 5

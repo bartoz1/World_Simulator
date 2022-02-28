@@ -14,8 +14,8 @@ class Guarana(Plant):
         return self._image
 
     def collision(self, other_organism):
-        self._world.add_world_event(f'{other_organism.name} zjadl {self.name} '
-                                    f'i teraz jego sila to {other_organism.strength + 3}')
+        self._world.add_world_event(f'{other_organism.name} ate {self.name} '
+                                    f'and has {other_organism.strength + 3} strength')
         tmp = self.position
         self._world.move_organism(other_organism, tmp)
         other_organism.strength += 3

@@ -10,7 +10,7 @@ class Hogweed(Plant):
     HOGWEED_GROWTH = 5      # chance in percents to regrow
 
     def __init__(self, world, pos_x: int, pos_y: int):
-        super().__init__(world, pos_x, pos_y, 0, 99, "barszcz sosnowskiego", OrganismType.HOGWEED)
+        super().__init__(world, pos_x, pos_y, 0, 99, "hogweed", OrganismType.HOGWEED)
         image_path = Plant.ASSETS_PATH.joinpath("hogweed.png")
         self._image = pygame.image.load(image_path)
 
@@ -20,7 +20,7 @@ class Hogweed(Plant):
 
     def collision(self, other_organism):
         if other_organism.org_type != OrganismType.CYBER_SHEEP:
-            self._world.add_world_event(f'{other_organism.name} zjadl {self.name} i umarl')
+            self._world.add_world_event(f'{other_organism.name} ate {self.name} and died')
             self._world.kill_organism(other_organism)
         else:
             tmp = self.position
@@ -54,5 +54,5 @@ class Hogweed(Plant):
                 organism = self._world.get_organism_by_pos(tmp)
                 org_type = organism.org_type
                 if org_type in Hogweed.ANIMALS_TO_KILL:
-                    self._world.add_world_event(f'{self.name} zabil {organism.name}')
+                    self._world.add_world_event(f'{self.name} killed {organism.name}')
                     self._world.kill_organism(organism)

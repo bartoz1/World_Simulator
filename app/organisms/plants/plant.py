@@ -20,6 +20,6 @@ class Plant(Organism, ABC):
             self._world.add_organism(self._type, next_pos)
 
     def collision(self, other_organism):
-        self._world.add_world_event(f'{other_organism.name} zjadl {self.name}')
+        self._world.add_world_event(f'{other_organism.name} ate {self.name}')
         self._world.move_organism(other_organism, self.position)
         self._world.kill_organism(self)
