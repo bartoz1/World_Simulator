@@ -419,7 +419,7 @@ class Engine:
         pygame.draw.rect(self._window, Engine.EVENTS_BAR_COLOR, pygame.Rect(
             x, y, 220, 280), 3, 15)
         font = pygame.font.Font(Engine.BOLD_FONT, 35)
-        text_obj = font.render("DODAJ ORGANIZM", 0, Engine.INFO_COLOR)
+        text_obj = font.render("ADD NEW ORGANISM", 0, Engine.INFO_COLOR)
         text_rect = text_obj.get_rect()
         text_rect.topleft = (x+10, y)
         self._window.blit(text_obj, text_rect)
