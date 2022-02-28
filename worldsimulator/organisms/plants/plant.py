@@ -1,6 +1,6 @@
 from abc import ABC
 from ..organism import Organism
-from app.utilities import OrganismType, Directions, FieldState
+from worldsimulator.utilities import OrganismType, Directions, FieldState
 from random import randint
 from pathlib import Path
 

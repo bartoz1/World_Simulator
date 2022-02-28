@@ -1,5 +1,5 @@
 from .plant import Plant
-from app.utilities import OrganismType
+from worldsimulator.utilities import OrganismType
 import pygame
 
 

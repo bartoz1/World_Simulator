@@ -1,5 +1,5 @@
 from .plant import Plant
-from app.utilities import OrganismType, Directions, FieldState
+from worldsimulator.utilities import OrganismType, Directions, FieldState
 import pygame
 import copy
 from random import randint

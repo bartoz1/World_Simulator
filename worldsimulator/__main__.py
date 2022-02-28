@@ -1,6 +1,6 @@
-from app.engine import Engine
-from app.utilities import Options
-from app.world import World
+from worldsimulator.engine import Engine
+from worldsimulator.utilities import Options
+from worldsimulator.world import World
 
 engine = Engine()
 

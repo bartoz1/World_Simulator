@@ -1,5 +1,5 @@
 from .animal import Animal
-from app.utilities import OrganismType, Position, Directions, FieldState
+from worldsimulator.utilities import OrganismType, Position, Directions, FieldState
 import pygame
 import math
 import copy

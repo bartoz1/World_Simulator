@@ -1,6 +1,6 @@
 import pygame, sys
-from app.world import World
-from app.utilities import Options, OrganismType, Position, Directions
+from worldsimulator.world import World
+from worldsimulator.utilities import Options, OrganismType, Position, Directions
 from pathlib import Path
 import os
 MAIN_MENU_TEXT_POS = 50

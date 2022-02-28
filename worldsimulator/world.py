@@ -1,21 +1,21 @@
-from app.utilities import Position, FieldState, OrganismType
+from worldsimulator.utilities import Position, FieldState, OrganismType
 import bisect
 from random import randint
-from app.organisms.animals.wolf import Wolf
-from app.organisms.animals.sheep import Sheep
-from app.organisms.animals.cyber_sheep import CyberSheep
-from app.organisms.animals.fox import Fox
-from app.organisms.animals.antelope import Antelope
-from app.organisms.animals.turtle import Turtle
-from app.organisms.animals.human import Human
-from app.organisms.plants.grass import Grass
-from app.organisms.plants.dandelion import Dandelion
-from app.organisms.plants.wolfberries import WolfBerries
-from app.organisms.plants.guarana import Guarana
-from app.organisms.plants.hogweed import Hogweed
+from worldsimulator.organisms.animals.wolf import Wolf
+from worldsimulator.organisms.animals.sheep import Sheep
+from worldsimulator.organisms.animals.cyber_sheep import CyberSheep
+from worldsimulator.organisms.animals.fox import Fox
+from worldsimulator.organisms.animals.antelope import Antelope
+from worldsimulator.organisms.animals.turtle import Turtle
+from worldsimulator.organisms.animals.human import Human
+from worldsimulator.organisms.plants.grass import Grass
+from worldsimulator.organisms.plants.dandelion import Dandelion
+from worldsimulator.organisms.plants.wolfberries import WolfBerries
+from worldsimulator.organisms.plants.guarana import Guarana
+from worldsimulator.organisms.plants.hogweed import Hogweed
 import copy
 
-from app.organisms.animals.animal import Animal
+from worldsimulator.organisms.animals.animal import Animal
 #from organisms.organism import Organism
 from pprint import pprint
 
