@@ -14,7 +14,7 @@ pip install git+https://github.com/bartoz1/World_Simulator.git#egg=worldsimulato
 ## Usage
 
 ```bash
-python -m world_simulator
+python -m worldsimulator
 ```
 The player can move the human using the arrows, while the organisms move according to their behavior. It is also possible to add new organisms to the map: right-click on a selected world field and insert a new organism from the list in that place.
 
